@@ -1,0 +1,9 @@
+# ignore all logs
+*.pkl
+
+# ignore the file .txt
+MUJOCO_LOG.TXT
+
+__pycache__
+
+wandb
