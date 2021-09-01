@@ -39,21 +39,21 @@ def env_info(env_name):
 
 observationSpace, actionSpace = env_info(args.env)
 
-wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
-config = wandb.config
-config.LAMBDA = 40
-config.MU = 1
-config.sigma = 0.3
-config.mutateAtribute = 0.1
-config.numThreads = 8
-config.numGen = 200
-config.mutatePop = 0.9
-config.layer_sizes = [observationSpace, 64, 64, actionSpace]
-config.env = args.env
-config.iterations = int(3e4)
+# wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
+# config = wandb.config
+# config.LAMBDA = 40
+# config.MU = 1
+# config.sigma = 0.3
+# config.mutateAtribute = 0.1
+# config.numThreads = 8
+# config.numGen = 200
+# config.mutatePop = 0.9
+# config.layer_sizes = [observationSpace, 64, 64, actionSpace]
+# config.env = args.env
+# config.iterations = int(3e4)
 
 # A feed forward neural network with input size of 5, two hidden layers of size 4 and output of size 3
-layer_sizes = config.layer_sizes
+layer_sizes = [observationSpace, 64, 64, actionSpace]
 model = FeedForwardNetwork(layer_sizes=layer_sizes)
 
 
@@ -134,7 +134,7 @@ def selAverage(individuals, k, fit_attr="fitness"):
 
 
 def simulate(individual, render):
-    env = gym.make(config.env)  # criando ambiente para cada indivíduo "pesos"
+    env = gym.make(args.env)  # criando ambiente para cada indivíduo "pesos"
     model.set_weights(individual)  # alterando os pesos da rede
     # here our best reward is zero
     reward = 0
@@ -158,13 +158,13 @@ toolbox.register(
     "mutate",
     tools.mutGaussian,
     mu=0,
-    sigma=config.sigma,
-    indpb=config.mutateAtribute,
+    sigma=0.3,
+    indpb=0.1,
 )  # aumentar um pouco o ruido
 toolbox.register("select", selAverage)  # trocar pelo metodo roleta
 toolbox.register("evaluate", fitness)
 
-pool = multiprocessing.Pool(processes=config.numThreads)
+pool = multiprocessing.Pool(processes=8)
 toolbox.register("map", pool.map)
 
 toolbox.decorate("mate", checkStrategy(MAX_STRATEGY))
@@ -173,7 +173,7 @@ toolbox.decorate("mutate", checkStrategy(MAX_STRATEGY))
 
 def main():
     random.seed()
-    MU, LAMBDA = config.MU, config.LAMBDA  # aumentar a população
+    MU, LAMBDA = 1, 40  # aumentar a população
     pop = toolbox.population(n=MU)
     hof = tools.HallOfFame(1)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -188,8 +188,8 @@ def main():
         mu=MU,
         lambda_=LAMBDA,
         cxpb=0,
-        mutpb=config.mutatePop,
-        ngen=config.numGen,
+        mutpb=0.9,
+        ngen=1000,
         stats=stats,
         halloffame=hof,
     )
@@ -197,7 +197,7 @@ def main():
     modelPath = (
         str(datetime.datetime.now()).replace(" ", "_").replace(":", "-").split(".")[0]
         + "_"
-        + config.env
+        + args.env
         + ".pkl"
     )
     with open(modelPath, "wb") as fp:
