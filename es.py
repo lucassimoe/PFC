@@ -195,8 +195,7 @@ def main():
     )
 
     modelPath = (
-        "models/"
-        + str(datetime.datetime.now()).replace(" ", "_").replace(":", "-").split(".")[0]
+        str(datetime.datetime.now()).replace(" ", "_").replace(":", "-").split(".")[0]
         + "_"
         + config.env
         + ".pkl"
