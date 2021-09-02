@@ -83,6 +83,10 @@ def simulate(individual, render):
         reward += rew
 
         if done:
+            # print(reward)
+            # env.reset()
+            # reward = 0
             break
+
     env.close()
     return (reward,)

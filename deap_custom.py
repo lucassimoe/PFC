@@ -1,9 +1,8 @@
-from deap import creator, base, tools, algorithms
+from deap import creator, base, tools
 import math
 import array
 import multiprocessing
 from env_def import layer_sizes, generateES, checkStrategy, fitness, selAverage
-
 
 IND_SIZE = math.prod(
     layer_sizes
@@ -34,14 +33,14 @@ toolbox.register(
 )
 
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("mate", tools.cxESBlend, alpha=0.1)
+toolbox.register("mate", tools.cxESBlend, alpha=0.3)
 # toolbox.register("mutate", tools.mutESLogNormal, c=1.0, indpb=0.03)
 toolbox.register(
     "mutate",
     tools.mutGaussian,
     mu=0,
     sigma=0.3,
-    indpb=0.2,
+    indpb=0.4,
 )  # aumentar um pouco o ruido
 toolbox.register(
     "select", tools.selTournament, tournsize=5
