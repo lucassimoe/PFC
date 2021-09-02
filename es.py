@@ -1,12 +1,11 @@
 import pickle
-
-import wandb
 import datetime
 import random
 import argparse
 import numpy
 
 from deap_custom import toolbox, tools, algorithms
+
 
 parser = argparse.ArgumentParser(description="Evolution Strategies. ")
 parser.add_argument("--env", default="Humanoid-v2")
@@ -26,12 +25,11 @@ args = parser.parse_args()
 # config.mutatePop = 0.9
 # config.layer_sizes = [observationSpace, 64, 64, actionSpace]
 # config.env = args.env
-# config.iterations = int(3e4)
 
 
 def main():
-    random.seed()
-    MU, LAMBDA = 1, 20  # aumentar a população
+    random.seed(42)
+    MU, LAMBDA = 2, 20  # aumentar a população
     pop = toolbox.population(n=MU)
     hof = tools.HallOfFame(1)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -45,9 +43,9 @@ def main():
         toolbox,
         mu=MU,
         lambda_=LAMBDA,
-        cxpb=0,
-        mutpb=0.9,
-        ngen=500,
+        cxpb=0.2,
+        mutpb=0.4,
+        ngen=200,
         stats=stats,
         halloffame=hof,
     )
