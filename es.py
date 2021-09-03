@@ -16,10 +16,10 @@ args = parser.parse_args()
 
 wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
 config = wandb.config
-config.LAMBDA = 20
+config.LAMBDA = 16
 config.MU = 2
-config.num_gen = 200
-config.mutate_pop = 0.7
+config.num_gen = 100
+config.mutate_pop = 0.6
 config.cross_prob = 0.3
 
 
@@ -34,7 +34,7 @@ def main():
     stats.register("min", numpy.min)
     stats.register("max", numpy.max)
 
-    pop, logbook = algorithms.eaMuCommaLambda(
+    pop, logbook = algorithms.eaMuPlusLambda(
         pop,
         toolbox,
         mu=MU,

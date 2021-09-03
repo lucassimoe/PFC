@@ -1,7 +1,7 @@
 from evostra.models import FeedForwardNetwork
 import pickle
 
-from env_def import simulate, env_info
+from env_def import simulate_test, env_info
 import argparse
 import gym
 import deap_custom
@@ -25,8 +25,7 @@ with open(args.model + ".pkl", "rb") as fb:
 ind = weights["halloffame"][0]
 
 model.set_weights(ind)
-get_reward = simulate(ind, True)
-# print(get_reward)
+get_reward = simulate_test(ind, True)
 # while True:
 #     get_reward = simulate(ind, True)
 # with open(args.model,'rb') as fp:
