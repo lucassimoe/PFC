@@ -33,13 +33,13 @@ toolbox.register(
 )
 
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("mate", tools.cxESBlend, alpha=0.1)
+toolbox.register("mate", tools.cxESBlend, alpha=0.4)
 # toolbox.register("mutate", tools.mutESLogNormal, c=1.0, indpb=0.03)
 toolbox.register(
     "mutate",
     tools.mutGaussian,
     mu=0,
-    sigma=0.1,
+    sigma=0.2,
     indpb=0.6,
 )  # aumentar um pouco o ruido
 toolbox.register("select", tools.selRoulette)  # trocar pelo metodo roleta

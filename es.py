@@ -16,11 +16,11 @@ args = parser.parse_args()
 
 wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
 config = wandb.config
-config.LAMBDA = 16
+config.LAMBDA = 14
 config.MU = 2
 config.num_gen = 100
-config.mutate_pop = 0.6
-config.cross_prob = 0.3
+config.mutate_pop = 0.4
+config.cross_prob = 0.5
 
 
 def main():
