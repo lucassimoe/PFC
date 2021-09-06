@@ -18,7 +18,7 @@ observationSpace, actionSpace = env_info(args.env)
 
 
 # A feed forward neural network with input size of 5, two hidden layers of size 4 and output of size 3
-model = FeedForwardNetwork(layer_sizes=[observationSpace, 128, 128, actionSpace])
+model = FeedForwardNetwork(layer_sizes=[observationSpace, 50, actionSpace])
 
 
 # with open(args.model + ".pkl", "rb") as fb:

@@ -18,6 +18,7 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
                 "max": max(rewards),
                 "avg": sum(rewards) / len(rewards),
                 "min": min(rewards),
+                "it": iteration,
             }
             pbar.set_postfix(stats)
             logger.log(stats)

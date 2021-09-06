@@ -22,12 +22,12 @@ wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
 config = wandb.config
 config.population_size = 50
 config.sigma = 0.1
-config.learning_rate = 0.03
+config.learning_rate = 0.08
 config.decay = 0.995
-config.num_threads = -1
-config.layer_sizes = [observationSpace, 128, 128, actionSpace]
+config.num_threads = 4
+config.layer_sizes = [observationSpace, 256, 256, actionSpace]
 config.env = args.env
-config.iterations = int(1000)
+config.iterations = int(2000)
 
 
 # A feed forward neural network with input size of 5, two hidden layers of size 4 and output of size 3
