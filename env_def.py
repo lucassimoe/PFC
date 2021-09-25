@@ -50,24 +50,24 @@ def fitness(individual):
     return reward
 
 
-# def selAverage(individuals, k, fit_attr="fitness"):
-#     ind = individuals[0]
-#     # print("K = {}".format(k))
-#     fitness = abs(getattr(ind, fit_attr).values[0])
-#     for j in range(len(ind)):
-#         ind[j] = ind[j] * fitness
-#     sum_fitness = fitness
+def selAverage(individuals, k, fit_attr="fitness"):
+    ind = individuals[0]
+    # print("K = {}".format(k))
+    fitness = abs(getattr(ind, fit_attr).values[0])
+    for j in range(len(ind)):
+        ind[j] = ind[j] * fitness
+    sum_fitness = fitness
 
-#     for i in range(1, len(individuals)):
-#         fitness = abs(getattr(individuals[i], fit_attr).values[0])
-#         for j in range(len(individuals[i])):
-#             ind[j] += fitness * individuals[i][j]
-#         sum_fitness += fitness
+    for i in range(1, len(individuals)):
+        fitness = abs(getattr(individuals[i], fit_attr).values[0])
+        for j in range(len(individuals[i])):
+            ind[j] += fitness * individuals[i][j]
+        sum_fitness += fitness
 
-#     for j in range(len(ind)):
-#         ind[j] /= sum_fitness
-#     # print("Mean Fitness: {}".format(sum_fitness / len(individuals)))
-#     return [ind for _ in range(k)]
+    for j in range(len(ind)):
+        ind[j] /= sum_fitness
+    # print("Mean Fitness: {}".format(sum_fitness / len(individuals)))
+    return [ind for _ in range(k)]
 
 
 def simulate(individual, render):

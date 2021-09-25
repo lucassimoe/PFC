@@ -1,3 +1,13 @@
 mexer no min e max strategy
 mexer no mi e lambda
 numero de geração de 1000 pra mais
+
+Criar uma função que pega os melhores individuos para somar no individuo base ou central
+mudar o ambiente de treino
+
+exportar o individuo durante o treino para avaliar a evolução
+
+sigma 0.05
+learning 0.001
+
+5 treinos com os hiperparametros que deram certo e depois testar com a  função que pega os melhores individuos

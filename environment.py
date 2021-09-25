@@ -28,7 +28,7 @@ def make_get_reward(env_name, model, _render):
         # here our best reward is zero
         reward = 0
         obs = env.reset()
-        for step in range(100000):
+        for step in range(10000):
             if render:
                 env.render()
             # print(model.predict(obs))

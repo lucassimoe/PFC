@@ -32,7 +32,7 @@ model = FeedForwardNetwork(layer_sizes=[observationSpace, 50, actionSpace])
 #     get_reward = simulate(ind, True)
 with open(args.model, "rb") as fp:
     model.set_weights(pickle.load(fp))
-print(model.get_weights())
+# print(model.get_weights())
 env = gym.make(args.env)
 obs = env.reset()
 reward = 0
