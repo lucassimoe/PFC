@@ -4,7 +4,31 @@ from tqdm import tqdm
 import numpy as np
 
 
+def worker_process(arg):
+    get_reward_func, weights = arg
+    return get_reward_func(weights)
+
+
 class EvolutionEstrategyCustom(EvolutionStrategy):
+    def _get_rewards(self, pool, population):
+        if pool is not None:
+            worker_args = (
+                (self.get_reward, self._get_weights_try(self.weights, p))
+                for p in population
+            )
+            rewards = pool.map(worker_process, worker_args)
+
+        else:
+            rewards = []
+            for p in population:
+                weights_try = self._get_weights_try(self.weights, p)
+                rewards.append(self.get_reward(weights_try))
+
+        infos = np.array(rewards)
+        rewards = infos[:, 0]
+        steps = infos[:, 1]
+        return rewards, steps
+
     def _update_weights(self, rewards, population, k):
         rewards = np.array(rewards[:k])
         population = np.array(population[:k])
@@ -25,13 +49,16 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             k = self.POPULATION_SIZE
         pool = mp.Pool(self.num_threads) if self.num_threads > 1 else None
         pbar = tqdm(range(iterations))
-
-        for iteration in pbar:
-
+        total_steps = 0
+        cgen = 0
+        while total_steps < iterations * 1000000:
+            cgen += 1
             population = self._get_population()
-            rewards = self._get_rewards(pool, population)
+            rewards, steps = self._get_rewards(pool, population)
             # print(rewards)
-            # print(population)
+            # print("aaaa")
+            total_steps += np.sum(steps)
+            # print(total_steps)
             # ordene os índices em vez dos elementos em si
             indices = list(range(len(rewards)))
             indices.sort(
@@ -43,15 +70,11 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             # print(order_population)
             self._update_weights(rewards, population, k)
             stats = {
-                "max": max(rewards),
-                "avg": sum(rewards) / len(rewards),
-                "min": min(rewards),
+                "max": max(rewards[:k]),
+                "avg": sum(rewards[:k]) / len(rewards[:k]),
+                "min": min(rewards[:k]),
             }
-            if iteration == iterations / 4:
-                print(self.learning_rate)
-            if iteration == iterations / 2:
-                print(self.learning_rate)
-            pbar.set_postfix(stats)
+            # pbar.set_postfix(stats)
             logger.log(stats)
             # if (iteration + 1) % print_step == 0:
             #     print(
