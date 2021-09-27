@@ -3,6 +3,7 @@ import multiprocessing as mp
 from tqdm import tqdm
 import numpy as np
 import pickle
+import wandb
 
 
 def worker_process(arg):
@@ -73,6 +74,7 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
                 print(rewards_aux)
                 with open("best_ind.pkl", "wb") as fp:
                     pickle.dump(self.weights, fp)
+                wandb.save("best_ind.pkl")
                 rewards_aux = rewards[0]
             stats = {
                 "max": max(rewards[:k]),
