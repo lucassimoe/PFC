@@ -2,6 +2,7 @@ from evostra.algorithms.evolution_strategy import EvolutionStrategy
 import multiprocessing as mp
 from tqdm import tqdm
 import numpy as np
+import pickle
 
 
 def worker_process(arg):
@@ -49,6 +50,7 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             k = self.POPULATION_SIZE
         pool = mp.Pool(self.num_threads) if self.num_threads > 1 else None
         pbar = tqdm(range(iterations))
+        rewards_aux = 0
         for interation in pbar:
             population = self._get_population()
             rewards, steps = self._get_rewards(pool, population)
@@ -63,9 +65,15 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             )  # ordene os índices com relação ao seu respectivo valor em x
             rewards = [rewards[i] for i in indices]
             population = [population[i] for i in indices]
+
             # print(order_rewards)
             # print(order_population)
             self._update_weights(rewards, population, k)
+            if rewards[0] > rewards_aux:
+                print(rewards_aux)
+                with open("best_ind.pkl", "wb") as fp:
+                    pickle.dump(self.weights, fp)
+                rewards_aux = rewards[0]
             stats = {
                 "max": max(rewards[:k]),
                 "avg": sum(rewards[:k]) / len(rewards[:k]),
