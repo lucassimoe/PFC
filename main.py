@@ -19,15 +19,15 @@ observationSpace, actionSpace = env_info(args.env)
 
 wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
 config = wandb.config
-config.population_size = 40
+config.population_size = 20
 config.population_bests = 20
-config.sigma = 0.02
-config.learning_rate = 0.001
-config.decay = 1.0
+config.sigma = 0.1
+config.learning_rate = 0.03
+config.decay = 0.995
 config.num_threads = -1
 config.layer_sizes = [observationSpace, 50, actionSpace]
 config.env = args.env
-config.iterations = 50
+config.iterations = int(2e4)
 
 # A feed forward neural network with input size of 5, two hidden layers of size 4 and output of size 3
 model = FeedForwardNetwork(layer_sizes=config.layer_sizes)
