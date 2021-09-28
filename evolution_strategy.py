@@ -52,12 +52,15 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
         pool = mp.Pool(self.num_threads) if self.num_threads > 1 else None
         pbar = tqdm(range(iterations))
         rewards_aux = 0
-        for interation in pbar:
+        total_steps = 0
+        cgen = 0
+        while total_steps < iterations * 1000000:
+            cgen += 1
             population = self._get_population()
             rewards, steps = self._get_rewards(pool, population)
             # print(rewards)
             # print("aaaa")
-            # total_steps += np.sum(steps)
+            total_steps += np.sum(steps)
             # print(total_steps)
             # ordene os índices em vez dos elementos em si
             indices = list(range(len(rewards)))
@@ -67,19 +70,18 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             rewards = [rewards[i] for i in indices]
             population = [population[i] for i in indices]
 
-            # print(order_rewards)
-            # print(order_population)
             self._update_weights(rewards, population, k)
-            if rewards[0] > rewards_aux:
-                print(rewards_aux)
+            reward_base, step_base = self.get_reward(self.weights)
+            if reward_base > rewards_aux:
                 with open("best_ind.pkl", "wb") as fp:
                     pickle.dump(self.weights, fp)
                 wandb.save("best_ind.pkl")
-                rewards_aux = rewards[0]
+                rewards_aux = reward_base
             stats = {
                 "max": max(rewards[:k]),
                 "avg": sum(rewards[:k]) / len(rewards[:k]),
                 "min": min(rewards[:k]),
+                "base": reward_base,
             }
             pbar.set_postfix(stats)
             logger.log(stats)
@@ -88,47 +90,7 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             #         "iter %d. reward: %f"
             #         % (iteration + 1, self.get_reward(self.weights))
             #     )
+        print(cgen)
         if pool is not None:
             pool.close()
             pool.join()
-
-    # def run(self, iterations, print_step=10, logger=None, k=None):
-    #     if k is None:
-    #         k = self.POPULATION_SIZE
-    #     pool = mp.Pool(self.num_threads) if self.num_threads > 1 else None
-    #     pbar = tqdm(range(iterations))
-    #     total_steps = 0
-    #     cgen = 0
-    #     while total_steps < iterations * 1000000:
-    #         cgen += 1
-    #         population = self._get_population()
-    #         rewards, steps = self._get_rewards(pool, population)
-    #         # print(rewards)
-    #         # print("aaaa")
-    #         total_steps += np.sum(steps)
-    #         # print(total_steps)
-    #         # ordene os índices em vez dos elementos em si
-    #         indices = list(range(len(rewards)))
-    #         indices.sort(
-    #             key=lambda i: -rewards[i]
-    #         )  # ordene os índices com relação ao seu respectivo valor em x
-    #         rewards = [rewards[i] for i in indices]
-    #         population = [population[i] for i in indices]
-    #         # print(order_rewards)
-    #         # print(order_population)
-    #         self._update_weights(rewards, population, k)
-    #         stats = {
-    #             "max": max(rewards[:k]),
-    #             "avg": sum(rewards[:k]) / len(rewards[:k]),
-    #             "min": min(rewards[:k]),
-    #         }
-    #         # pbar.set_postfix(stats)
-    #         logger.log(stats)
-    #         # if (iteration + 1) % print_step == 0:
-    #         #     print(
-    #         #         "iter %d. reward: %f"
-    #         #         % (iteration + 1, self.get_reward(self.weights))
-    #         #     )
-    #     if pool is not None:
-    #         pool.close()
-    #         pool.join()

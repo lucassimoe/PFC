@@ -21,8 +21,8 @@ wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
 config = wandb.config
 config.population_size = 20
 config.population_bests = 20
-config.sigma = 0.02
-config.learning_rate = 0.001
+config.sigma = 0.2
+config.learning_rate = 0.01
 config.decay = 0.9995
 config.num_threads = 5
 config.layer_sizes = [observationSpace, 50, actionSpace]

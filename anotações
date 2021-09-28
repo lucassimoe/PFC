@@ -11,3 +11,36 @@ sigma 0.05
 learning 0.001
 
 5 treinos com os hiperparametros que deram certo e depois testar com a  função que pega os melhores individuos
+
+varios testes com essa config
+config.population_size = 40
+config.population_bests = 40
+config.sigma = 0.02
+config.learning_rate = 0.01
+config.decay = 0.995
+config.num_threads = -1
+config.layer_sizes = [observationSpace, 50, actionSpace]
+config.env = args.env
+config.iterations = 50
+
+config.population_size = 40
+config.population_bests = 40
+config.sigma = 0.1
+config.learning_rate = 0.03
+config.decay = 0.995
+config.num_threads = -1
+config.layer_sizes = [observationSpace, 50, actionSpace]
+config.env = args.env
+config.iterations = 50
+
+
+apos achar os melhores treinos testar com essa config
+config.population_size = 40
+config.population_bests = 10,20,30
+config.sigma = 0.2
+config.learning_rate = 0.01
+config.decay = 0.995
+config.num_threads = -1
+config.layer_sizes = [observationSpace, 50, actionSpace]
+config.env = args.env
+config.iterations = 50
