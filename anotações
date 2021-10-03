@@ -12,6 +12,9 @@ learning 0.001
 
 5 treinos com os hiperparametros que deram certo e depois testar com a  função que pega os melhores individuos
 
+Colocar o pseudo codigo da openai no correlato
+
+
 varios testes com essa config
 config.population_size = 40
 config.population_bests = 40

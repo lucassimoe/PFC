@@ -9,9 +9,15 @@ import wandb
 import datetime
 
 parser = argparse.ArgumentParser(description="Evolution Strategies. ")
-parser.add_argument("--env", default="Humanoid-v2")
 parser.add_argument("--render", type=bool, default=False)
-parser.add_argument("--checkPoint", default=None)
+parser.add_argument("--pop_size", default=None)
+parser.add_argument("--pop_best", default=None)
+parser.add_argument("--sigma", default=None)
+parser.add_argument("--learning_rate", default=None)
+parser.add_argument("--decay", default=None)
+parser.add_argument("--num_threads", default=-1)
+parser.add_argument("--env", default="Humanoid-v2")
+parser.add_argument("--it", default=50)
 
 args = parser.parse_args()
 
@@ -19,23 +25,28 @@ observationSpace, actionSpace = env_info(args.env)
 
 wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
 config = wandb.config
-config.population_size = 20
-config.population_bests = 20
-config.sigma = 0.02
-config.learning_rate = 0.001
-config.decay = 0.9995
-config.num_threads = -1
+config.population_size = int(args.pop_size)
+config.population_bests = int(args.pop_best)
+config.sigma = float(args.sigma)
+config.learning_rate = float(args.learning_rate)
+config.decay = float(args.decay)
+config.num_threads = int(args.num_threads)
 config.layer_sizes = [observationSpace, 50, actionSpace]
 config.env = args.env
-config.iterations = 140
+config.iterations = int(args.it)
+# config = wandb.config
+# config.population_size = 20
+# config.population_bests = 20
+# config.sigma = 0.01
+# config.learning_rate = 0.001
+# config.decay = 0.9995
+# config.num_threads = -1
+# config.layer_sizes = [observationSpace, 50, actionSpace]
+# config.env = args.env
+# config.iterations = 140
 
 # A feed forward neural network with input size of 5, two hidden layers of size 4 and output of size 3
 model = FeedForwardNetwork(layer_sizes=config.layer_sizes)
-
-if args.checkPoint is not None:
-    with open(args.checkPoint, "rb") as fp:
-        model.set_weights(pickle.load(fp))
-        print("loaded checkPoint: " + args.checkPoint)
 
 get_reward = make_get_reward(config.env, model, args.render)
 # if your task is computationally expensive, you can use num_threads > 1 to use multiple processes;
