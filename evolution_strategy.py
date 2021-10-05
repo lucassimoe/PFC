@@ -82,6 +82,7 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
                 "avg": sum(rewards[:k]) / len(rewards[:k]),
                 "min": min(rewards[:k]),
                 "base": reward_base,
+                "base_best": rewards_aux,
             }
             pbar.set_postfix(stats)
             logger.log(stats)
