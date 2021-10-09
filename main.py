@@ -9,6 +9,7 @@ import wandb
 import datetime
 
 parser = argparse.ArgumentParser(description="Evolution Strategies. ")
+parser.add_argument("--seed", default=0)
 parser.add_argument("--render", type=bool, default=False)
 parser.add_argument("--pop_size", default=None)
 parser.add_argument("--pop_best", default=None)
@@ -23,8 +24,9 @@ args = parser.parse_args()
 
 observationSpace, actionSpace = env_info(args.env)
 
-wandb.init(project="Evolution-Estrategy", entity="lucas-simoes")
+wandb.init(project="ES-Envs-test", entity="lucas-simoes")
 config = wandb.config
+config.seed = int(args.seed)
 config.population_size = int(args.pop_size)
 config.population_bests = int(args.pop_best)
 config.sigma = float(args.sigma)
@@ -34,16 +36,6 @@ config.num_threads = int(args.num_threads)
 config.layer_sizes = [observationSpace, 50, actionSpace]
 config.env = args.env
 config.iterations = int(args.it)
-# config = wandb.config
-# config.population_size = 20
-# config.population_bests = 20
-# config.sigma = 0.01
-# config.learning_rate = 0.001
-# config.decay = 0.9995
-# config.num_threads = -1
-# config.layer_sizes = [observationSpace, 50, actionSpace]
-# config.env = args.env
-# config.iterations = 140
 
 # A feed forward neural network with input size of 5, two hidden layers of size 4 and output of size 3
 model = FeedForwardNetwork(layer_sizes=config.layer_sizes)
@@ -57,6 +49,7 @@ get_reward = make_get_reward(config.env, model, args.render)
 es = EvolutionEstrategyCustom(
     model.get_weights(),
     get_reward,
+    value_seed=config.seed,
     population_size=config.population_size,
     sigma=config.sigma,
     learning_rate=config.learning_rate,

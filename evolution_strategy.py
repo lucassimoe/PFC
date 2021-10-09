@@ -1,5 +1,6 @@
 from evostra.algorithms.evolution_strategy import EvolutionStrategy
 import multiprocessing as mp
+from numpy.random.mtrand import seed
 from tqdm import tqdm
 import numpy as np
 import pickle
