@@ -49,14 +49,18 @@ get_reward = make_get_reward(config.env, model, args.render)
 es = EvolutionEstrategyCustom(
     model.get_weights(),
     get_reward,
-    value_seed=config.seed,
     population_size=config.population_size,
     sigma=config.sigma,
     learning_rate=config.learning_rate,
     decay=config.decay,
     num_threads=config.num_threads,
 )
-es.run(config.iterations, logger=wandb, k=config.population_bests)
+es.run(
+    config.iterations,
+    logger=wandb,
+    k=config.population_bests,
+    value_seed=config.seed,
+)
 
 model_path = (
     "models/"

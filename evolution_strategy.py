@@ -47,7 +47,13 @@ class EvolutionEstrategyCustom(EvolutionStrategy):
             )
         self.learning_rate *= self.decay
 
-    def run(self, iterations, print_step=10, logger=None, k=None):
+    def run(self, iterations, print_step=10, logger=None, k=None, value_seed=None):
+
+        if value_seed is None:
+            np.random.seed(0)
+        else:
+            np.random.seed(value_seed)
+
         if k is None:
             k = self.POPULATION_SIZE
         pool = mp.Pool(self.num_threads) if self.num_threads > 1 else None
